@@ -35,6 +35,27 @@ try {
 }
 
 
+// original procedural loop based approach
+// 3 levels of nested indentation
+// 2 nested loops
+// conditional check
+$totalCost = 0;
+
+foreach ( $products as $product) {
+    if ($product['product_type'] === 'Lamp' || $product['product_type'] === 'Wallet'){
+        foreach( $product["variants"] as $variant) {
+            $totalCost += $variant["price"];
+        }
+    }
+}
+
+// in comparison to above approach
+// just a series of flat transformations
+// so we just remove any products that are not Lamp or Wallet
+// then we get all of their variants
+// then we flatten those variants so we have a single collection of variants
+// then we convert each variant to its price
+// then we just sum them up
 $totalCost = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
 })->map(function ($product) {
@@ -46,9 +67,3 @@ $totalCost = $products->filter(function ($product) {
 
 dd($totalCost);
 // 398
-
-// $totalCost is just the result of calling $prices->sum()
-// we can move ->sum to the end of $prices pipeline above
-
-// then notice that $totalCost is just mapping the variants
-// so we can move the ->map() operation to the end of the variants pipeline
