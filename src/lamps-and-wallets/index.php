@@ -29,20 +29,18 @@ function dd($var)
 
 
 try {
-    // wrap this array of products in a collection so we can use the fluent api
     $products = collect(loadJson('products.json')['products']);
 } catch (JsonException $e) {
     echo $e->getMessage();
 }
 
-// this is going to take a closure
-// that takes a product
 $lampsAndWallets = $products->filter(function ($product) {
-    // and now I have to decide
-    // what do we want to check
-    // to decide that we should keep this product
-
-    return ($product['product_type'] === 'Lamp' || $product['product_type'] === 'Wallet');
+    // in_array(the_thing_you_are_looking_for, exists_in_this_array)
+    // return true if the product type is a Lamp or Wallet
+    // shorter
+    // add item to array is easier
+    return in_array($product['product_type'], ['Lamp','Wallet']);
+//    return ($product['product_type'] === 'Lamp' || $product['product_type'] === 'Wallet');
 });
 
 
