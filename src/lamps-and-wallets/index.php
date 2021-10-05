@@ -51,11 +51,12 @@ foreach ( $products as $product) {
 
 // in comparison to above approach
 // just a series of flat transformations
-// so we just remove any products that are not Lamp or Wallet
-// then we get all of their variants
-// then we flatten those variants so we have a single collection of variants
-// then we convert each variant to its price
-// then we just sum them up
+
+// filter..so we just remove any products that are not Lamp or Wallet
+// map..then we get all of their variants
+// flatten..then we flatten those variants so we have a single collection of variants
+// map..then we convert each variant to its price
+// summ..then we just sum them up
 $totalCost = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
 })->map(function ($product) {
