@@ -1,7 +1,9 @@
 {
     "name": "rnott/refactoring-collections",
     "license": "MIT",
-    "require": {},
+    "require": {
+        "illuminate/support": "^8.62"
+    },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
     },
