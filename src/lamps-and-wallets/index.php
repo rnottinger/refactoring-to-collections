@@ -34,50 +34,21 @@ try {
     echo $e->getMessage();
 }
 
-$lampsAndWallets = $products->filter(function ($product) {
+
+$totalCost = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
-});
-
-// we don't have just one big collection of variants
-// instead we have a collection of collections of variants
-// we need to figure out how to flatten this down
-// to just one big collection of variants
-// flatten is an operation that lets you flatten an array of nested arrays
-// or a collection of nested collections
-// to some arbitrary depth
-// by default it flattens it to an infinite depth
-// so it will flatten it down as much as it can to one top level
-// in our case we know the variants are only 1 level deeper
-// so we can just explicitly flatten 1 level
-$variants = $lampsAndWallets->map(function ($product) {
+})->map(function ($product) {
     return $product['variants'];
-})->flatten(1);
-
-//dd($variants);
-
-// so now that we have a collection of variants
-// we can easily map these variants
-// into their prices
-
-//$prices = collect();
-$prices = $variants->map(function ($variant) {
+})->flatten(1)->map(function ($variant) {
     return $variant['price'];
-});
+})->sum();
 
-//dd($prices);
-
-
-//foreach ( $lampsAndWallets as $product) {
-//    foreach ($product["variants"] as $variant) {
-//        $prices[] = $variant['price'];
-//    }
-//}
-
-//$totalCost = $prices->reduce(function ($totalCost, $price) {
-//    return $totalCost + $price;
-//},0);
-
-$totalCost = $prices->sum();
 
 dd($totalCost);
 // 398
+
+// $totalCost is just the result of calling $prices->sum()
+// we can move ->sum to the end of $prices pipeline above
+
+// then notice that $totalCost is just mapping the variants
+// so we can move the ->map() operation to the end of the variants pipeline
