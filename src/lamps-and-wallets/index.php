@@ -34,23 +34,15 @@ try {
     echo $e->getMessage();
 }
 
-// similiarly doing a map() where all you are doing is returning a single field
-// from the items that you are mapping over
-// is also a very common operation
-// the collection class has a method called pluck()
-// pluck takes a single parameter which is a string
-// which represents the name of the key or property
-// that you are trying to fetch
-// within the items that you are mapping over
 $totalCost = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
 })->flatMap(function ($product) {
     return $product['variants'];
-//})->map(function ($variant) {
-//    return $variant['price'];
-//})->sum();
-})->pluck('price')->sum();
+//})->pluck('price')->sum();
+})->sum('price');
 
-
+// sum() can also take a parameter just like pluck()
+// pass 'price' to sum
+// and remove pluck()
 dd($totalCost);
 // 398
