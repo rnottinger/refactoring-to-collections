@@ -35,12 +35,14 @@ try {
 }
 
 $lampsAndWallets = $products->filter(function ($product) {
-    // in_array(the_thing_you_are_looking_for, exists_in_this_array)
-    // return true if the product type is a Lamp or Wallet
-    // shorter
-    // add item to array is easier
-    return in_array($product['product_type'], ['Lamp','Wallet']);
-//    return ($product['product_type'] === 'Lamp' || $product['product_type'] === 'Wallet');
+//    return in_array($product['product_type'], ['Lamp','Wallet']);
+    return collect(['Lamp','Wallet'])->contains($product['product_type']);
+    // this is exactly the same as the in_array check except every method call here
+    // only takes one parameter
+    // and it is very hard to make the mistake
+    // of putting the wrong variable
+    // in the wrong parameter
+    // because there is only one parameter to fill
 });
 
 
