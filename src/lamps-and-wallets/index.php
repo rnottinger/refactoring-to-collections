@@ -38,31 +38,46 @@ $lampsAndWallets = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
 });
 
+// we don't have just one big collection of variants
+// instead we have a collection of collections of variants
+// we need to figure out how to flatten this down
+// to just one big collection of variants
+// flatten is an operation that lets you flatten an array of nested arrays
+// or a collection of nested collections
+// to some arbitrary depth
+// by default it flattens it to an infinite depth
+// so it will flatten it down as much as it can to one top level
+// in our case we know the variants are only 1 level deeper
+// so we can just explicitly flatten 1 level
+$variants = $lampsAndWallets->map(function ($product) {
+    return $product['variants'];
+})->flatten(1);
 
-//$totalCost = 0;
-//$prices = [];
-$prices = collect();
-foreach ( $lampsAndWallets as $product) {
-    foreach ($product["variants"] as $variant) {
-//        $totalCost += $variant["price"];
-        $prices[] = $variant['price'];
-    }
-}
-//
-//$totalCost = 0;
-//foreach ($prices as $price) {
-//    // now we can determine our total cost
-//    $totalCost += $price;
+//dd($variants);
+
+// so now that we have a collection of variants
+// we can easily map these variants
+// into their prices
+
+//$prices = collect();
+$prices = $variants->map(function ($variant) {
+    return $variant['price'];
+});
+
+//dd($prices);
+
+
+//foreach ( $lampsAndWallets as $product) {
+//    foreach ($product["variants"] as $variant) {
+//        $prices[] = $variant['price'];
+//    }
 //}
-// this is going to take a function that is going to take $totalCost as its first parameter
-// which is the total cost that we are trying to build up
-// price as its second parameter
-// and we want to return what the total cost should be for the next iteration
-// which is return $totalCost + $price;
-// passing the initial value of 0 (default is null)
-$totalCost = $prices->reduce(function ($totalCost, $price) {
-    return $totalCost + $price;
-},0);
+
+//$totalCost = $prices->reduce(function ($totalCost, $price) {
+//    return $totalCost + $price;
+//},0);
+
+$totalCost = $prices->sum();
 
 dd($totalCost);
 // 398
