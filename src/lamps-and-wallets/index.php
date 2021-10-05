@@ -35,26 +35,34 @@ try {
 }
 
 $lampsAndWallets = $products->filter(function ($product) {
-//    return in_array($product['product_type'], ['Lamp','Wallet']);
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
-    // this is exactly the same as the in_array check except every method call here
-    // only takes one parameter
-    // and it is very hard to make the mistake
-    // of putting the wrong variable
-    // in the wrong parameter
-    // because there is only one parameter to fill
 });
 
 
-$totalCost = 0;
-
-//foreach ( $products as $product) {
+//$totalCost = 0;
+//$prices = [];
+$prices = collect();
 foreach ( $lampsAndWallets as $product) {
-//    if ($product['product_type'] === 'Lamp' || $product['product_type'] === 'Wallet') {
     foreach ($product["variants"] as $variant) {
-        $totalCost += $variant["price"];
+//        $totalCost += $variant["price"];
+        $prices[] = $variant['price'];
     }
-//    }
-    dd($totalCost);
-    // 199
 }
+//
+//$totalCost = 0;
+//foreach ($prices as $price) {
+//    // now we can determine our total cost
+//    $totalCost += $price;
+//}
+// this is going to take a function that is going to take $totalCost as its first parameter
+// which is the total cost that we are trying to build up
+// price as its second parameter
+// and we want to return what the total cost should be for the next iteration
+// which is return $totalCost + $price;
+// passing the initial value of 0 (default is null)
+$totalCost = $prices->reduce(function ($totalCost, $price) {
+    return $totalCost + $price;
+},0);
+
+dd($totalCost);
+// 398
