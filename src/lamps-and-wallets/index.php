@@ -34,15 +34,27 @@ try {
     echo $e->getMessage();
 }
 
+
+// so now we have a pipeline with just 3 operations
+// filter.. we filter out any product that is not Lamp or Wallet
+// we grab all of thoe variants
+// and then we sum up the price fields of all of those variants
+
+// that is a pretty expressive solution to this problem
+// everything is done in these discrete steps
+// there is no worrying the entire state of all of the operations
+// that we are doing at the same time
+
+// very linear and easy to understand
+// as long as you are willing to take the time to get comfortable
+// with programming in this style
+
+
 $totalCost = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
 })->flatMap(function ($product) {
     return $product['variants'];
-//})->pluck('price')->sum();
 })->sum('price');
 
-// sum() can also take a parameter just like pluck()
-// pass 'price' to sum
-// and remove pluck()
 dd($totalCost);
 // 398
