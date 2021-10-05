@@ -35,33 +35,23 @@ try {
 }
 
 
-// original procedural loop based approach
-// 3 levels of nested indentation
-// 2 nested loops
-// conditional check
-$totalCost = 0;
-
-foreach ( $products as $product) {
-    if ($product['product_type'] === 'Lamp' || $product['product_type'] === 'Wallet'){
-        foreach( $product["variants"] as $variant) {
-            $totalCost += $variant["price"];
-        }
-    }
-}
-
-// in comparison to above approach
-// just a series of flat transformations
-
-// filter..so we just remove any products that are not Lamp or Wallet
-// map..then we get all of their variants
-// flatten..then we flatten those variants so we have a single collection of variants
-// map..then we convert each variant to its price
-// summ..then we just sum them up
+// this is looking pretty good but there is actually some things that we can do to simplify this even more
+// notice the combination where we do the map operation then we do the flatten() operation
+// this is a common transformation to have to do when working with nested data
+// so common in fact that there is actually a name for this operation called flatMap
+// where you map some nested objects
+// and then flatten them down a level
+// and the collection class has a flatMap operation that we can use
+// so instead of calling map() then flatten()
+// we can just call flatMap() instead
+//
 $totalCost = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
-})->map(function ($product) {
+//})->map(function ($product) {
+})->flatMap(function ($product) {
     return $product['variants'];
-})->flatten(1)->map(function ($variant) {
+//})->flatten(1)->map(function ($variant) {
+})->map(function ($variant) {
     return $variant['price'];
 })->sum();
 
