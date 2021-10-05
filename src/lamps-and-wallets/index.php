@@ -34,26 +34,22 @@ try {
     echo $e->getMessage();
 }
 
-
-// this is looking pretty good but there is actually some things that we can do to simplify this even more
-// notice the combination where we do the map operation then we do the flatten() operation
-// this is a common transformation to have to do when working with nested data
-// so common in fact that there is actually a name for this operation called flatMap
-// where you map some nested objects
-// and then flatten them down a level
-// and the collection class has a flatMap operation that we can use
-// so instead of calling map() then flatten()
-// we can just call flatMap() instead
-//
+// similiarly doing a map() where all you are doing is returning a single field
+// from the items that you are mapping over
+// is also a very common operation
+// the collection class has a method called pluck()
+// pluck takes a single parameter which is a string
+// which represents the name of the key or property
+// that you are trying to fetch
+// within the items that you are mapping over
 $totalCost = $products->filter(function ($product) {
     return collect(['Lamp','Wallet'])->contains($product['product_type']);
-//})->map(function ($product) {
 })->flatMap(function ($product) {
     return $product['variants'];
-//})->flatten(1)->map(function ($variant) {
-})->map(function ($variant) {
-    return $variant['price'];
-})->sum();
+//})->map(function ($variant) {
+//    return $variant['price'];
+//})->sum();
+})->pluck('price')->sum();
 
 
 dd($totalCost);
