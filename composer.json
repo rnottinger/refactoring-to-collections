@@ -10,7 +10,8 @@
     "autoload": {
         "psr-4": {
             "App\\" : "src/",
-            "App\\LampsAndWallets\\" : "src/lamps-and-wallets/"
+            "App\\LampsAndWallets\\" : "src/lamps-and-wallets/",
+            "App\\Demo\\" : "src/Demo/"
         }
     },
     "autoload-dev": {

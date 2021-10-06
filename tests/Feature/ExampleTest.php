@@ -12,4 +12,21 @@ class ExampleTest extends TestCase
         $this->assertTrue(true);
         //Test code
     }
+
+    /** @test */
+    public function it_fails()
+    {
+        $this->assertTrue(true);
+        $this->assertFalse(false);
+    }
+
+
+    /** @test */
+    public function another_test()
+    {
+        $this->assertTrue(true);
+        $this->assertFalse(false);
+    }
+
+
 }
